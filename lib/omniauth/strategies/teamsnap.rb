@@ -1,25 +1,26 @@
-require 'omniauth-oauth'
+require 'omniauth-oauth2'
 # require 'omniauth'
 require 'json'
 
 module OmniAuth
   module Strategies
-    class TeamSnap < OmniAuth::Strategies::OAuth
+    class TeamSnap < OmniAuth::Strategies::OAuth2
 
-      # option :name, 'teamsnap'
+      option :name, 'team_snap'
       option :fields, [:name, :username]
       option :uid_field, :email
-
       option :client_options, {:authorize_path => '/oauth/authorize',
                                :site => 'https://auth.teamsnap.com',
-                               :client_id => ENV['client_id'],
-                               :client_secret => ENV['client_secret']}
-                              #  :proxy => ENV['http_proxy'] ? URI(ENV['http_proxy']) : nil}
+                               :client_id => '...',
+                               :client_secret => '...',
+                               :proxy => ENV['http_proxy'] ? URI(ENV['http_proxy']) : nil}
 
-      access_token { access_token.params[:token] }
-      # uid { access_token.params[:user_id] }
+      uid {
+        binding.pry
+         access_token.params[:user_id] }
 
       info do
+        binding.pry
         {
           # :nickname => raw_info['screen_name'],
           # :name => raw_info['name'],

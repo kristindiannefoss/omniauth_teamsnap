@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "./omniauth-teamsnap/version"
+require_relative "lib/omniauth-teamsnap/version"
 
 Gem::Specification.new do |s|
   s.name        = "omniauth-teamsnap"
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Kristin Dianne Foss"]
   s.email       = ["kris.foss@gmail.com"]
   s.homepage    = "https://github.com/kristindiannefoss/omniauth-teamsnap"
-  s.description = %q{OmniAuth strategy for TeamSnap}
+  s.description = "OmniAuth strategy for TeamSnap"
   s.summary     = s.description
   s.license     = "MIT"
   s.files         = `git ls-files`.split("\n")
@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency 'json', '~> 1.3'
-  s.add_dependency 'omniauth-oauth', '~> 1.1'
+  s.add_dependency 'omniauth-oauth2', '~> 1.2'
   s.add_development_dependency 'bundler', '~> 1.0'
 end

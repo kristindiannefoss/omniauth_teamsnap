@@ -19,10 +19,6 @@ module OmniAuth
         site: 'https://auth.teamsnap.com',
         authorize_url: "https://auth.teamsnap.com/oauth/authorize",
         token_url: 'https://auth.teamsnap.com/oauth/token',
-        client_id:
-        'x',
-        client_secret:
-        'y',
       }
 
       option :access_token_options, {

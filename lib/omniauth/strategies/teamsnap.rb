@@ -26,45 +26,33 @@ module OmniAuth
         param_name: 'access_token'
       }
 
-
       # possibly need: client_id, redirect_uri, response_type
       option :authorize_options, [:scope, :client_id, :redirect_uri, :response_type]
 
-      uid { raw_info['id'] }
+      uid { raw_items['data'].find { |h| h['name'] == 'id' }['value'] }
 
       info do
-        binding.pry
-        prune!({
-          'nickname' => raw_info['username'],
-          'email' => raw_info['email'],
-          'name' => raw_info['name'],
-          'first_name' => raw_info['first_name'],
-          'last_name' => raw_info['last_name'],
-          'image' => image_url(uid, options),
-          'description' => raw_info['bio'],
-          'urls' => {
-            'Facebook' => raw_info['link'],
-            'Website' => raw_info['website']
-          },
-          'location' => (raw_info['location'] || {})['name'],
-          'verified' => raw_info['verified']
-        })
-      end
+        data  = raw_items['data'].map  { |hash| [hash['name'], hash['value']] }.to_h
+        links = raw_items['links'].map { |hash| [hash['rel'],  hash['href']]  }.to_h
 
-      extra do
-        binding.pry
-        hash = {}
-        hash['raw_info'] = raw_info unless skip_info?
-        prune! hash
+        { 'id'         => data['id'],
+          "email"      => data["email"],
+          "first_name" => data["first_name"],
+          "last_name"  => data["last_name"],
+          "urls"       => links,
+        }
       end
 
       def raw_info
-        binding.pry
-        @raw_info ||= access_token.get('me', info_options).parsed || {}
+        @raw_info ||= begin
+          api_endpoint         = "https://api.teamsnap.com/v3/me"
+          authorization_params = {:Authorization => "Bearer #{access_token.token}"}
+          response             = RestClient.get(api_endpoint, authorization_params)
+          JSON.parse(response)['collection']
+        end
       end
 
       def info_options
-        binding.pry
         params = {appsecret_proof: appsecret_proof}
         params.merge!({fields: (options[:info_fields] || 'name,email')})
         params.merge!({locale: options[:locale]}) if options[:locale]
@@ -88,7 +76,6 @@ module OmniAuth
       end
 
       def access_token_options
-        binding.pry
         # options.access_token_options
         #        .map { |k, v| [k.to_sym, v] }
         #        .to_h
@@ -105,7 +92,7 @@ module OmniAuth
             end
           end
 
-          params[:scope] ||= DEFAULT_SCOPE
+          params[:scope] ||= DEFAULT_SCOPE # <-- this looks like it does nothing
         end
       end
 
@@ -120,6 +107,10 @@ module OmniAuth
       end
 
       private
+
+      def raw_items
+        raw_info['items'][0]
+      end
 
       def signed_request_from_cookie
         binding.pry
@@ -157,12 +148,6 @@ module OmniAuth
         end
       end
 
-      def prune!(hash)
-        hash.delete_if do |_, value|
-          prune!(value) if value.is_a?(Hash)
-          value.nil? || (value.respond_to?(:empty?) && value.empty?)
-        end
-      end
 
       def image_url(uid, options)
         binding.pry

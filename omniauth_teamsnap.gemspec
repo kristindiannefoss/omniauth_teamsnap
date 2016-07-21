@@ -5,7 +5,7 @@ require_relative "lib/omniauth-teamsnap/version"
 Gem::Specification.new do |s|
   s.name        = "omniauth-teamsnap"
   s.version     = OmniAuth::TeamSnap::VERSION
-  s.authors     = ["Kristin Dianne Foss"]
+  s.authors     = ["Kristin Dianne Foss", "Josh Cheek"]
   s.email       = ["kris.foss@gmail.com"]
   s.homepage    = "https://github.com/kristindiannefoss/omniauth-teamsnap"
   s.description = "OmniAuth strategy for TeamSnap"

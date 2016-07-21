@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'figaro'
+gem 'rest-client'
 #
 # gemspec
 #

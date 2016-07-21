@@ -1,5 +1,4 @@
 require 'omniauth/strategies/oauth2'
-# require 'omniauth/facebook/signed_request'
 require 'openssl'
 require 'rack/utils' # <-- ?? -.^
 require 'uri'
